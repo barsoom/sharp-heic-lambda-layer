@@ -1,11 +1,11 @@
 # Library Versions
-WEBP_VERSION=1.6.0
-LIBDE265_VERSION=1.0.16
+WEBP_VERSION=1.6.0# https://github.com/webmproject/libwebp/tags
+LIBDE265_VERSION=1.0.16# https://github.com/strukturag/libde265/tags
 LIBAOM_VERSION=3.12.1
 X265_VERSION=4.1
-LIBHEIF_VERSION=1.20.1
-VIPS_VERSION=8.17.1
-SHARP_VERSION=0.34.3
+LIBHEIF_VERSION=1.20.2# https://github.com/strukturag/libheif/tags
+VIPS_VERSION=8.17.2# https://github.com/libvips/libvips/tags
+SHARP_VERSION=0.34.4# https://github.com/lovell/sharp/tags
 
 PREFIX_PATH=/usr/local
 LIB_PATH=$(PREFIX_PATH)/lib
@@ -35,7 +35,7 @@ build-SharpHEICLayer: libvips
 	# ls -la $(ARTIFACTS_DIR)/nodejs/node_modules/sharp/src/build/*/
 
 	# copy the shared objects
-	ldd $(ARTIFACTS_DIR)/nodejs/node_modules/sharp/src/build/Release/sharp-linux-x64.node | awk '{ print $$3 }' | grep '/' | xargs -I '{}' cp '{}' $(ARTIFACTS_DIR)/lib
+	ldd $(ARTIFACTS_DIR)/nodejs/node_modules/sharp/build/Release/sharp.node | awk '{ print $$3 }' | grep '/' | xargs -I '{}' cp '{}' $(ARTIFACTS_DIR)/lib
 
 	# debug logs
 	# ls -la $(ARTIFACTS_DIR)/lib/
@@ -48,7 +48,7 @@ libwebp:
 libde265:
 	# libde265
 	curl -L https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)/libde265-$(LIBDE265_VERSION).tar.gz | tar zx
-	cd libde265-$(LIBDE265_VERSION) && ./autogen.sh && ./configure --disable-dec265 --disable-sherlock265 --prefix=$(PREFIX_PATH) && make V=0 && make install
+	cd libde265-$(LIBDE265_VERSION) && ./autogen.sh && autoreconf -i --force && ./configure --disable-dec265 --disable-sherlock265 --prefix=$(PREFIX_PATH) && make V=0 && make install
 
 x265:
 	# x265
@@ -56,6 +56,7 @@ x265:
 	cd x265_$(X265_VERSION) && cd build/linux && cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(PREFIX_PATH) ../../source && make && make install
 
 libaom:
+	# libaom
 	curl -L https://storage.googleapis.com/aom-releases/libaom-${LIBAOM_VERSION}.tar.gz | tar zx && \
 	cd libaom-${LIBAOM_VERSION} && cd build && cmake -DCONFIG_AV1_ENCODER=1 -DBUILD_SHARED_LIBS=1 -DENABLE_TESTS=0 -DENABLE_DOCS=0 -DCMAKE_INSTALL_PREFIX=${PREFIX_PATH} -DCMAKE_INSTALL_LIBDIR=${PREFIX_PATH}/lib .. && make V=1 && make install
 
@@ -82,7 +83,8 @@ libvips: installLib libheif libwebp
 # 	cd vips-$(VIPS_VERSION)/tools && ./vips rot $(EXAMPLE_IMAGE_PATH)/example.heic $(EXAMPLE_IMAGE_PATH)/example-rot.jpeg d90
 
 installLib:
-	dnf groupinstall -y "Development Tools" && \
+	dnf group install -y "Development Tools" && \
+	dnf clean all && \
 	dnf install -y \
 		glib2-devel \
 		expat-devel \
@@ -98,5 +100,5 @@ installLib:
 		nasm \
 		pkg-config \
 		meson \
-		ninja-build
-
+		ninja-build \
+		ImageMagick-devel

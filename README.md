@@ -1,3 +1,10 @@
+# TLDR
+
+Run this:
+
+    npm run build && SAM_BUCKET=auctionet-lambda-layers AWS_REGION=eu-west-1 npm run deploy
+
+
 # Sharp for AWS Lambda (with HEIC support)
 AWS Lambda Layer providing [sharp](https://github.com/lovell/sharp) with HEIC (and WebP) support
 

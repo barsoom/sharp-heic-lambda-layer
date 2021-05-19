@@ -1,9 +1,11 @@
+MAKEFLAGS+="-j $(shell nproc)"
+
 # Library Versions
-WEBP_VERSION=1.1.0
-LIBDE265_VERSION=1.0.8
-LIBHEIF_VERSION=1.10.0
-VIPS_VERSION=8.10.5
-SHARP_VERSION=0.27.0
+WEBP_VERSION=1.2.0# https://github.com/webmproject/libwebp/tags
+LIBDE265_VERSION=1.0.8# https://github.com/strukturag/libde265/tags
+LIBHEIF_VERSION=1.12.0# https://github.com/strukturag/libheif/tags
+VIPS_VERSION=8.10.6# https://github.com/libvips/libvips/tags
+SHARP_VERSION=0.28.2# https://github.com/lovell/sharp/tags
 
 PREFIX_PATH=/opt
 

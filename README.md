@@ -4,7 +4,6 @@ Run this:
 
     npm run build && SAM_BUCKET=auctionet-lambda-layers AWS_REGION=eu-west-1 npm run deploy
 
-
 # Sharp for AWS Lambda (with HEIC support)
 AWS Lambda Layer providing [sharp](https://github.com/lovell/sharp) with HEIC (and WebP) support
 
@@ -78,7 +77,7 @@ The following table lists the release version of this repo together with the ver
 |   1.1.0 | 0.27.0 |  8.10.5 |  1.10.0 |   1.1.0 |    1.0.8 |
 
 ### CompatibleRuntimes
-- `nodejs12.x`
+- `nodejs20.x`
 
 
 ## Contributions
